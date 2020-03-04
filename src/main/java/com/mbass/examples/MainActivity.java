@@ -1,31 +1,27 @@
 package com.mbass.examples;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.backendless.Backendless;
-import com.backendless.IDataStore;
 import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessException;
 import com.backendless.exceptions.BackendlessFault;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Date;
+import java.time.LocalDateTime;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.scribe.model.Response;
-import org.scribe.model.OAuthRequest;
 
 public class MainActivity extends Activity {
     private TextView status;
@@ -70,7 +66,8 @@ public class MainActivity extends Activity {
                 object.setID(course.get("id").toString());
 
                 String rawAssignments = getRawData("sections/" + object.getID() + "/assignments");
-                object.setAssignments(parseAssignments(rawAssignments));
+                //object.setAssignments(parseAssignments(rawAssignments));
+                parseAssignments(rawAssignments);
                 courses.add(object);
             }
         } catch (JSONException e) {
@@ -94,28 +91,80 @@ public class MainActivity extends Activity {
         return rawData;
     }
 
-    public String parseAssignments(String data) {
-        String assignments = "";
+//    public String parseAssignments(String data) {
+//        String assignments = "";
+//        try {
+//            JSONArray assignment_list = new JSONArray(data.substring(14, data.length()));
+//            for (int i = 0; i < assignment_list.length(); i++) {
+//                JSONObject assignment_data = assignment_list.getJSONObject(i);
+//                assignments += (assignment_data.get("title").toString() +",");
+//            }
+//            Log.i("107", assignments);
+//        }
+//
+//        catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return assignments;
+//    }
+
+    public List<Assignment> parseAssignments(String data) {
+        List<Assignment> assignments = new ArrayList<>();
         try {
             JSONArray assignment_list = new JSONArray(data.substring(14, data.length()));
-
             for (int i = 0; i < assignment_list.length(); i++) {
                 JSONObject assignment_data = assignment_list.getJSONObject(i);
-                assignments += (assignment_data.get("title").toString() +",");
+                Assignment assignment = new Assignment();
+                String rawDate = assignment_data.get("due").toString();
+                Date date;
+
+                if (!rawDate.equals("")) {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
+                    date = format.parse(rawDate);
+                }
+
+
+                else {
+                    String curr  = LocalDateTime.now().toString();
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-M-dd");
+                    date = format.parse(curr);
+                }
+
+                Log.i("128", rawDate + " " + date.toString());
+                assignment.setTitle(assignment_data.get("title").toString());
+                assignment.setDueDate(date);
+                assignment.setID(assignment_data.get("id").toString());
+                assignment.setCompleted(false);
+                assignments.add(assignment);
             }
-
-
-
-            Log.i("107", assignments);
         }
-
-        catch (JSONException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
+
+//        for (int i = 0; i < assignments.size(); i++) {
+//            Log.i("141", assignments.get(i).toString());
+//        }
         return assignments;
     }
 
 
-
+//    private static void setRelation(Course course, List assignments) {
+//        Backendless.Data.of(Course.class).addRelation(course,
+//                "assignment:Assignments:n", assignments,
+//                new AsyncCallback() {
+//                    @Override
+//                    public void handleResponse() {
+//
+//                    }
+//
+//
+//
+//                    @Override
+//                    public void handleFault(BackendlessFault fault) {
+//                        Log.e("TESTING", fault.getMessage());
+//                    }
+//                });
+//    }
 }
                                     

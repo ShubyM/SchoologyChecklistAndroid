@@ -5,14 +5,12 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="21"
+        android:minSdkVersion="26"
         android:targetSdkVersion="26" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application
-        android:debuggable="true"
-        android:testOnly="true" >
+    <application android:debuggable="true" >
         <activity android:name="com.mbass.examples.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

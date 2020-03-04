@@ -16,13 +16,13 @@ public class Course {
 //        this.assignments = assignments;
 //    }
 
-    public String assignments;
+    public List<Assignment> assignments;
 
-    public String getAssignments() {
+    public List<Assignment> getAssignments() {
         return assignments;
     }
 
-    public void setAssignments(String assignments) {
+    public void setAssignments(List<Assignment> assignments) {
         this.assignments = assignments;
     }
 
