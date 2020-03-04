@@ -43,6 +43,6 @@ public class Assignment {
     @Override
     public String toString() {
         return String.format("{Title : %s, Date : %s, ID: %s, Status : %s}",
-                title, dueDate.toString(), ID, completed);
+                title, "placeholder", ID, completed);
     }
 }

@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
         status = findViewById(R.id.status);
         List<Course> courses = getUserData("16053918");
 
-        for (Course course : courses) {
+        for (final Course course : courses) {
             Backendless.Data.of(Course.class).save(course, new AsyncCallback<Course>() {
                 @Override
                 public void handleResponse(Course response) {
@@ -66,8 +66,23 @@ public class MainActivity extends Activity {
                 object.setID(course.get("id").toString());
 
                 String rawAssignments = getRawData("sections/" + object.getID() + "/assignments");
-                //object.setAssignments(parseAssignments(rawAssignments));
-                parseAssignments(rawAssignments);
+                final List<Assignment> assignments = (parseAssignments(rawAssignments));
+
+                for (final Assignment assignment : assignments) {
+                    Backendless.Data.of(Assignment.class).save(assignment, new AsyncCallback<Assignment>() {
+                        @Override
+                        public void handleResponse(Assignment response) {
+                            Log.i("76", response.toString());
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            Log.i("82", fault.getMessage());
+                        }
+                    });
+                }
+                setRelation(object, assignments);
+                object.setAssignments(assignments);
                 courses.add(object);
             }
         } catch (JSONException e) {
@@ -87,7 +102,6 @@ public class MainActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return rawData;
     }
 
@@ -123,7 +137,6 @@ public class MainActivity extends Activity {
                     date = format.parse(rawDate);
                 }
 
-
                 else {
                     String curr  = LocalDateTime.now().toString();
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-M-dd");
@@ -132,7 +145,7 @@ public class MainActivity extends Activity {
 
                 Log.i("128", rawDate + " " + date.toString());
                 assignment.setTitle(assignment_data.get("title").toString());
-                assignment.setDueDate(date);
+               // assignment.setDueDate(date);
                 assignment.setID(assignment_data.get("id").toString());
                 assignment.setCompleted(false);
                 assignments.add(assignment);
@@ -141,30 +154,25 @@ public class MainActivity extends Activity {
         catch (Exception e) {
             e.printStackTrace();
         }
-
-//        for (int i = 0; i < assignments.size(); i++) {
-//            Log.i("141", assignments.get(i).toString());
-//        }
         return assignments;
     }
 
 
-//    private static void setRelation(Course course, List assignments) {
-//        Backendless.Data.of(Course.class).addRelation(course,
-//                "assignment:Assignments:n", assignments,
-//                new AsyncCallback() {
-//                    @Override
-//                    public void handleResponse() {
-//
-//                    }
-//
-//
-//
-//                    @Override
-//                    public void handleFault(BackendlessFault fault) {
-//                        Log.e("TESTING", fault.getMessage());
-//                    }
-//                });
-//    }
+    public void setRelation(Course course, List<Assignment> assignments) {
+        String relation = "assignments:Assignment:n";
+
+        Backendless.Data.of(Course.class).addRelation(course, relation, assignments,
+                new AsyncCallback<Integer>() {
+                    @Override
+                    public void handleResponse(Integer response) {
+                        Log.i("159", "WE DID IT");
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Log.e("ERROR", fault.getMessage());
+                    }
+                });
+    }
 }
                                     

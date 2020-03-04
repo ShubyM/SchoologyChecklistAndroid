@@ -1,4 +1,4 @@
-#Tue Mar 03 08:26:45 EST 2020
+#Wed Mar 04 08:15:18 EST 2020
 base.0=/Users/ssmish20/Documents/GitHub/SchoologyChecklistAndroid/build/intermediates/transforms/dexMerger/debug/1
 path.1=classes.dex
 renamed.1=classes2.dex
