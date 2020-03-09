@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/ssmish20/Documents/GitHub/SchoologyChecklistAndroid/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v26/values-v26.xml",
+            "outputFile": "/Users/Shuby/Documents/GitHub/SchoologyChecklistAndroid/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v26/values-v26.xml",
             "map": [
                 {
-                    "source": "/Users/ssmish20/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/88100f0f189b03f5350a116797df8ddb/res/values-v26/values-v26.xml",
+                    "source": "/Users/Shuby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/2e59dfb75dc7bd08981e436eb40ae663/res/values-v26/values-v26.xml",
                     "from": {
                         "startLines": "2,3,4,8,12,16",
                         "startColumns": "4,4,4,4,4,4",

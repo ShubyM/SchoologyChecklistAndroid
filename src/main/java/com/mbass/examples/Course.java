@@ -6,16 +6,6 @@ import java.util.List;
 public class Course {
     public String ID;
     public String name;
-//    public List<String> assignments;
-//
-//    public List<String> getAssignments() {
-//        return assignments;
-//    }
-//
-//    public void setAssignments(List<String> assignments) {
-//        this.assignments = assignments;
-//    }
-
     public List<Assignment> assignments;
 
     public List<Assignment> getAssignments() {
@@ -40,5 +30,11 @@ public class Course {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    @Override
+    public String toString() {
+        return String.format("{ Name : %s, ID : %s}", name, ID);
     }
 }

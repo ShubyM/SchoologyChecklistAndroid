@@ -8,6 +8,8 @@ public class Assignment {
     private String ID;
     private boolean completed;
 
+
+
     public String getTitle() {
         return title;
     }
@@ -42,7 +44,15 @@ public class Assignment {
 
     @Override
     public String toString() {
+        String date;
+
+        if (dueDate == null) {
+            date = "placeholder";
+        } else {
+            date = dueDate.toString();
+        }
+
         return String.format("{Title : %s, Date : %s, ID: %s, Status : %s}",
-                title, "placeholder", ID, completed);
+                title, date, ID, completed);
     }
 }

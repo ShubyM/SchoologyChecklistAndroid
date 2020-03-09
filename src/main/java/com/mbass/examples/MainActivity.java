@@ -1,24 +1,18 @@
 package com.mbass.examples;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.time.LocalDateTime;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,22 +29,47 @@ public class MainActivity extends Activity {
         Backendless.setUrl(Defaults.SERVER_URL);
         Backendless.initApp(getApplicationContext(), Defaults.APPLICATION_ID, Defaults.API_KEY);
         status = findViewById(R.id.status);
+
         List<Course> courses = getUserData("16053918");
 
-        for (final Course course : courses) {
+        for (Course course : courses) {
+
+
+            Log.i("37", course.getAssignments().toString());
+            saveCourses(course);
+        }
+
+   }
+
+
+    private void saveCourses(Course course) {
             Backendless.Data.of(Course.class).save(course, new AsyncCallback<Course>() {
                 @Override
                 public void handleResponse(Course response) {
-                    Log.i("REQUEST", "Stuff was added");
-                }
+                    Log.i("50", response.toString());
 
+                    //saveAssignments(response, response.getAssignments());
+                }
                 @Override
                 public void handleFault(BackendlessFault fault) {
-                    Log.i("ERROR", fault.toString());
+                    Log.e("56", fault.getMessage());
                 }
             });
-        }
     }
+
+    private void saveAssignments(final Course course, final List<Assignment> assignments) {
+       Backendless.Data.of(Assignment.class).create(assignments, new AsyncCallback<List<String>>() {
+           @Override
+           public void handleResponse(List<String> response) {
+               Log.i("64", response.toString());
+           }
+           @Override
+           public void handleFault(BackendlessFault fault) {
+               Log.e("70", fault.getMessage());
+           }
+       });
+    }
+
 
     private List<Course> getUserData(String uid) {
         List<Course> courses = new ArrayList<>();
@@ -61,27 +80,13 @@ public class MainActivity extends Activity {
             for (int i = 0; i < course_data.length(); i++) {
                 Course object = new Course();
                 JSONObject course = course_data.getJSONObject(i);
-
                 object.setName(course.get("course_title").toString());
                 object.setID(course.get("id").toString());
-
                 String rawAssignments = getRawData("sections/" + object.getID() + "/assignments");
-                final List<Assignment> assignments = (parseAssignments(rawAssignments));
-
-                for (final Assignment assignment : assignments) {
-                    Backendless.Data.of(Assignment.class).save(assignment, new AsyncCallback<Assignment>() {
-                        @Override
-                        public void handleResponse(Assignment response) {
-                            Log.i("76", response.toString());
-                        }
-
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            Log.i("82", fault.getMessage());
-                        }
-                    });
+                List<Assignment> assignments = (parseAssignments(rawAssignments));
+                if (assignments == null) {
+                    assignments.add(new Assignment());
                 }
-                setRelation(object, assignments);
                 object.setAssignments(assignments);
                 courses.add(object);
             }
@@ -104,24 +109,6 @@ public class MainActivity extends Activity {
         }
         return rawData;
     }
-
-//    public String parseAssignments(String data) {
-//        String assignments = "";
-//        try {
-//            JSONArray assignment_list = new JSONArray(data.substring(14, data.length()));
-//            for (int i = 0; i < assignment_list.length(); i++) {
-//                JSONObject assignment_data = assignment_list.getJSONObject(i);
-//                assignments += (assignment_data.get("title").toString() +",");
-//            }
-//            Log.i("107", assignments);
-//        }
-//
-//        catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return assignments;
-//    }
-
     public List<Assignment> parseAssignments(String data) {
         List<Assignment> assignments = new ArrayList<>();
         try {
@@ -131,21 +118,17 @@ public class MainActivity extends Activity {
                 Assignment assignment = new Assignment();
                 String rawDate = assignment_data.get("due").toString();
                 Date date;
-
                 if (!rawDate.equals("")) {
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
                     date = format.parse(rawDate);
                 }
-
                 else {
                     String curr  = LocalDateTime.now().toString();
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-M-dd");
                     date = format.parse(curr);
                 }
-
-                Log.i("128", rawDate + " " + date.toString());
                 assignment.setTitle(assignment_data.get("title").toString());
-               // assignment.setDueDate(date);
+                assignment.setDueDate(date);
                 assignment.setID(assignment_data.get("id").toString());
                 assignment.setCompleted(false);
                 assignments.add(assignment);
@@ -157,22 +140,20 @@ public class MainActivity extends Activity {
         return assignments;
     }
 
-
-    public void setRelation(Course course, List<Assignment> assignments) {
+    public void setRelation(Course course, List<String> assignments) {
         String relation = "assignments:Assignment:n";
-
+        Log.i("148", assignments.toString());
         Backendless.Data.of(Course.class).addRelation(course, relation, assignments,
                 new AsyncCallback<Integer>() {
                     @Override
                     public void handleResponse(Integer response) {
-                        Log.i("159", "WE DID IT");
+                        Log.i("159", response.toString());
                     }
-
                     @Override
                     public void handleFault(BackendlessFault fault) {
-                        Log.e("ERROR", fault.getMessage());
+                        Log.e("154", fault.getMessage());
                     }
-                });
+        });
     }
 }
                                     

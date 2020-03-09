@@ -1,11 +1,11 @@
 #Internal package file, do not edit.
-#Wed Mar 04 08:15:18 EST 2020
-1.base=/Users/ssmish20/Documents/GitHub/SchoologyChecklistAndroid/build/intermediates/transforms/dexMerger/debug/1
+#Sat Mar 07 00:01:33 EST 2020
+1.base=/Users/Shuby/Documents/GitHub/SchoologyChecklistAndroid/build/intermediates/transforms/dexMerger/debug/0
 0.baseType=DIRECTORY
 1.baseType=DIRECTORY
 count=2
 1.set=DEX
 0.path=classes.dex
 0.set=DEX
-0.base=/Users/ssmish20/Documents/GitHub/SchoologyChecklistAndroid/build/intermediates/transforms/dexMerger/debug/0
+0.base=/Users/Shuby/Documents/GitHub/SchoologyChecklistAndroid/build/intermediates/transforms/dexMerger/debug/1
 1.path=classes.dex
