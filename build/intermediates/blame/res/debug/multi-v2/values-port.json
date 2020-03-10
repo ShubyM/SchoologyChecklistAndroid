@@ -14,6 +14,21 @@
                     }
                 }
             ]
+        },
+        {
+            "outputFile": "/Users/ssmish20/Documents/GitHub/SchoologyChecklistAndroid/build/intermediates/incremental/mergeDebugResources/merged.dir/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/Users/ssmish20/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/88100f0f189b03f5350a116797df8ddb/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
         }
     ]
 }
